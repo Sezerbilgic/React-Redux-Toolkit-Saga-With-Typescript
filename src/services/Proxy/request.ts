@@ -1,4 +1,4 @@
-import { IGetAllPayloadModel, IGetPayloadModel } from "../../interfaces";
+import { IGetAllPayloadModel, IGetPayloadModel, IPostPayloadModel, IPutPayloadModel } from "../../interfaces";
 import Proxy from "./proxy.service";
 
 class Request {
@@ -7,8 +7,15 @@ class Request {
   }
 
   public GetAll = (payload: IGetAllPayloadModel) => {
-    console.log(payload.endpoint);
     return Proxy.get(payload.endpoint, { params: payload.parameters })
+  }
+
+  public Post = (payload: IPostPayloadModel) => {
+    return Proxy.post(payload.endpoint, payload.data)
+  }
+
+  public Put = (payload: IPutPayloadModel) => {
+    return Proxy.put(`${payload.endpoint}/${payload.id}`, payload.data)
   }
 }
 

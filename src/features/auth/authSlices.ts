@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IAuthState, IErrorResponse, IGetAllPayloadModel, IGetPayloadModel, IGetRequestModel, IGetResponse, IStateMisc, TGetResponseModel } from "../../interfaces"
+import { IAuthState, IErrorResponse, IGetAllPayloadModel, IGetPayloadModel, IGetRequestModel, IStateMisc, ISuccessResponse, TUpdateReducerModel, TUpdateReducers } from "../../interfaces"
 
 const stateMisc: IStateMisc = {
   loading: false,
-  error: null
+  saving: false,
+  error: null,
+  statusCode: null
 };
-
 
 const initialState: IAuthState = {
   example: {
@@ -24,28 +25,69 @@ const authSlices = createSlice({
   name: "Auth",
   initialState,
   reducers: {
-    getAll(state, payload: PayloadAction<IGetAllPayloadModel>) {
-      state[payload.payload.key].list.loading = true;
+    getAll(state, action: PayloadAction<IGetAllPayloadModel>) {
+      state[action.payload.key].list.loading = true;
     },
-    getAllSuccess(state, payload: PayloadAction<IGetResponse>) {
-      state[payload.payload.key].list.loading = false;
-      state[payload.payload.key].list.data = payload.payload.response.data;
+    getAllSuccess(state, action: PayloadAction<ISuccessResponse>) {
+      state[action.payload.key].list.loading = false;
+      state[action.payload.key].list.data = action.payload.response;
     },
-    getAllFailure(state, payload: PayloadAction<IErrorResponse>) {
-      state[payload.payload.key].list.loading = false;
-      state[payload.payload.key].list.error = payload.payload.error;
+    getAllFailure(state, action: PayloadAction<IErrorResponse>) {
+      state[action.payload.key].list.loading = false;
+      state[action.payload.key].list.error = action.payload.error;
     },
-    get(state, payload: PayloadAction<IGetPayloadModel>) {
-      state[payload.payload.key].single.loading = true;
+
+
+    get(state, action: PayloadAction<IGetPayloadModel>) {
+      state[action.payload.key].single.loading = true;
     },
-    getSuccess(state, payload: PayloadAction<IGetResponse>) {
-      state[payload.payload.key].single.loading = false;
-      state[payload.payload.key].single.data = payload.payload.response.data;
+    getSuccess(state, action: PayloadAction<ISuccessResponse>) {
+      state[action.payload.key].single.loading = false;
+      state[action.payload.key].single.data = action.payload.response;
     },
-    getFailure(state, payload: PayloadAction<IErrorResponse>) {
-      state[payload.payload.key].single.loading = false;
-      state[payload.payload.key].single.error = payload.payload.error;
-    }
+    getFailure(state, action: PayloadAction<IErrorResponse>) {
+      state[action.payload.key].single.loading = false;
+      state[action.payload.key].single.error = action.payload.error;
+    },
+
+
+    post(state, action: PayloadAction<TUpdateReducerModel>) {
+      state[action.payload.key].single.saving = true
+    },
+    postSuccess(state, action: PayloadAction<ISuccessResponse>) {
+      state[action.payload.key].single.saving = false
+      state[action.payload.key].single.statusCode = action.payload.statusCode;
+    },
+    postFailure(state, action: PayloadAction<IErrorResponse>) {
+      state[action.payload.key].single.saving = false
+      state[action.payload.key].single.statusCode = action.payload.statusCode;
+    },
+
+
+    put(state, action: PayloadAction<TUpdateReducerModel>) {
+      state[action.payload.key].single.saving = true;
+    },
+    putSuccess(state, action: PayloadAction<ISuccessResponse>) {
+      state[action.payload.key].single.saving = false
+      state[action.payload.key].single.statusCode = action.payload.statusCode;
+    },
+    putFailure(state, action: PayloadAction<IErrorResponse>) {
+      state[action.payload.key].single.saving = false
+      state[action.payload.key].single.statusCode = action.payload.statusCode;
+    },
+
+
+    delete(state, action: PayloadAction<TUpdateReducers>) {
+      state[action.payload.key].single.saving = true;
+    },
+    deleteSuccess(state, action: PayloadAction<ISuccessResponse>) {
+      state[action.payload.key].single.saving = false
+      state[action.payload.key].single.statusCode = action.payload.statusCode;
+    },
+    deleteFailure(state, action: PayloadAction<IErrorResponse>) {
+      state[action.payload.key].single.saving = false
+      state[action.payload.key].single.statusCode = action.payload.statusCode;
+    },
   }
 });
 
